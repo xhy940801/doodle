@@ -3,16 +3,19 @@ INCDIR=inc
 OBJDIR=obj
 BINDIR=bin
 DEPDIR=dep
+LIBDIR=lib
 
 POSTFIX=cpp
 OUTFILENAME=outfile.out
 TESTPOSTFIX=.test
 
-SOURCES=$(notdir $(wildcard src/*.$(POSTFIX)))
+SOURCES=$(notdir $(wildcard $(SRCDIR)/*.$(POSTFIX)))
 OBJS=$(patsubst %.$(POSTFIX),%.o,$(SOURCES))
+LIBS=$(notdir $(wildcard $(LIBDIR)/*.so))
+LIBKINKERS=$(patsubst lib%.so,-l%,$(LIBS))
 
 BASEFLAGS= -Wall -I $(INCDIR) -std=c++0x -pthread 
-POSTFIXFLAGS= -lstdc++
+POSTFIXFLAGS= -L $(LIBDIR) -lstdc++ $(LIBKINKERS)
 CFLAGS=$(BASEFLAGS) -O2
 
 vpath %.h 			$(INCDIR)
